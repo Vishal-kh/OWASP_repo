@@ -1,0 +1,23 @@
+// In a non-compliant scenario, the application uses an outdated version of an XML processing library that is vulnerable to XXE attacks.
+
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import java.io.StringReader;
+
+public class OutdatedComponentExample {
+
+   public static void main(String[] args) {
+       String xml = "<!DOCTYPE foo [ <!ENTITY xxe SYSTEM \"file:///etc/passwd\"> ]>"
+                  + "<root>&xxe;</root>";
+
+       try {
+           // Using an outdated version of the library with known XXE vulnerability
+           SAXBuilder builder = new SAXBuilder();
+           Document document = builder.build(new StringReader(xml));
+
+           // Process the document...
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+}

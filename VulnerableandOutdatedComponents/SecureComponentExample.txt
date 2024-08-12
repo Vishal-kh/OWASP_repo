@@ -1,0 +1,28 @@
+// In a compliant scenario, the application uses an updated and secure version of the XML processing library, and additionally, it properly configures the parser to disable external entity processing.
+
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.XMLReaders;
+
+import java.io.StringReader;
+
+public class SecureComponentExample {
+
+   public static void main(String[] args) {
+       String xml = "<!DOCTYPE foo [ <!ENTITY xxe SYSTEM \"file:///etc/passwd\"> ]>"
+                  + "<root>&xxe;</root>";
+
+       try {
+           // Using an updated and secure version of the library
+           SAXBuilder builder = new SAXBuilder(XMLReaders.NONVALIDATING);
+           builder.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+           builder.setExpandEntities(false);  // Disable entity expansion to prevent XXE
+
+           Document document = builder.build(new StringReader(xml));
+
+           // Process the document...
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+}
