@@ -1,0 +1,34 @@
+//In a compliant scenario, the application logs all critical security events, such as successful and failed login attempts, to a secure logging system that is monitored for suspicious activities.
+java
+Copy code
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class SecureLoggingExample {
+
+   private static final Logger logger = Logger.getLogger(SecureLoggingExample.class.getName());
+
+   // Mock database of users
+   private static final Map<String, String> users = new HashMap<>();
+
+   static {
+       users.put("user1", "password123");
+       users.put("admin", "Str0ngP@ssw0rd!");
+   }
+
+   public static void main(String[] args) {
+       String username = "admin";          // User input (username)
+       String password = "wrongpassword";  // User input (password)
+
+       // Secure logging of login attempts
+       if (users.containsKey(username) && users.get(username).equals(password)) {
+           System.out.println("Authentication successful! Access granted.");
+           logger.log(Level.INFO, "Successful login attempt for user: " + username);
+       } else {
+           System.out.println("Authentication failed! Access denied.");
+           logger.log(Level.WARNING, "Failed login attempt for user: " + username);
+       }
+   }
+}

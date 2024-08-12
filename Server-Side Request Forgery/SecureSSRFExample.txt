@@ -1,0 +1,54 @@
+// In a compliant scenario, the application performs strict validation and sanitization of the user-provided URL before making any requests, ensuring that only allowed domains are accessed.
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.MalformedURLException;
+import java.util.Arrays;
+import java.util.List;
+
+public class SecureSSRFExample {
+
+   // Define a whitelist of allowed domains
+   private static final List<String> ALLOWED_DOMAINS = Arrays.asList("example.com", "trusted.com");
+
+   public static void main(String[] args) {
+       String userProvidedUrl = "http://example.com/data";  // Assuming valid user input
+
+       try {
+           URL url = new URL(userProvidedUrl);
+
+           // Validate the URL
+           if (isValidDomain(url)) {
+               HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+               connection.setRequestMethod("GET");
+
+               BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+               String inputLine;
+               StringBuilder content = new StringBuilder();
+
+               while ((inputLine = in.readLine()) != null) {
+                   content.append(inputLine);
+               }
+
+               in.close();
+               connection.disconnect();
+
+               System.out.println("Fetched content: " + content.toString());
+           } else {
+               System.out.println("Invalid URL domain. Access denied.");
+           }
+       } catch (MalformedURLException e) {
+           System.out.println("Invalid URL format. Access denied.");
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+
+   // Method to validate the domain of the provided URL
+   private static boolean isValidDomain(URL url) {
+       String host = url.getHost();
+       return ALLOWED_DOMAINS.contains(host);
+   }
+}

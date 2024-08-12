@@ -1,0 +1,28 @@
+// In a non-compliant scenario, the application does not log failed login attempts or critical security events, making it difficult to detect or investigate potential security incidents.
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class InsecureLoggingExample {
+
+   // Mock database of users
+   private static final Map<String, String> users = new HashMap<>();
+
+   static {
+       users.put("user1", "password123");
+       users.put("admin", "admin");
+   }
+
+   public static void main(String[] args) {
+       String username = "admin";          // User input (username)
+       String password = "wrongpassword";  // User input (password)
+
+       // No logging of login attempts
+       if (users.containsKey(username) && users.get(username).equals(password)) {
+           System.out.println("Authentication successful! Access granted.");
+       } else {
+           System.out.println("Authentication failed! Access denied.");
+       }
+   }
+}
+
