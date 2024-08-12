@@ -1,0 +1,28 @@
+// In a non-compliant scenario, the application fails to properly check the user’s role before granting access to the admin panel, allowing any authenticated user to access it.
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class InsecureAccessControlExample {
+
+   // Mock database of users and their roles
+   private static final Map<String, String> users = new HashMap<>();
+
+   static {
+       users.put("user1", "USER");
+       users.put("admin", "ADMIN");
+   }
+
+   public static void main(String[] args) {
+       String username = "user1";  // User input (username)
+
+       // Insecure: No proper role check before allowing access to admin panel
+       if (users.containsKey(username)) {
+           System.out.println("Welcome, " + username + "!");
+           System.out.println("Accessing admin panel...");
+           // User can access admin functionalities
+       } else {
+           System.out.println("Access denied.");
+       }
+   }
+}
