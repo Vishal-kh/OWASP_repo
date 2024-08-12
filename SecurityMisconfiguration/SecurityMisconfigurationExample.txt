@@ -1,0 +1,20 @@
+// In a non-compliant scenario, the application is configured to display detailed error messages, including stack traces, which can be valuable to attackers.
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class SecurityMisconfigurationExample {
+
+   public static void main(String[] args) {
+       try {
+           // Establish a connection to the database
+           Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "root", "wrongpassword");
+
+           // Further database operations...
+       } catch (SQLException e) {
+           // Insecure: Printing the detailed stack trace, including sensitive information
+           e.printStackTrace();
+       }
+   }
+}

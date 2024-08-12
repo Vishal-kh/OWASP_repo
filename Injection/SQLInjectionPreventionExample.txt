@@ -1,0 +1,37 @@
+// In a compliant scenario, the application uses prepared statements with parameterized queries to safely insert user input into the SQL query.
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+public class SQLInjectionPreventionExample {
+
+   public static void main(String[] args) {
+       String username = "admin";  // Normal user input
+       String password = "secureP@ssword";  // Normal user input
+
+       try {
+           // Establish a connection to the database
+           Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "root", "password");
+
+           // Safe SQL query using prepared statement
+           String query = "SELECT * FROM users WHERE username = ? AND password = ?";
+           PreparedStatement pstmt = conn.prepareStatement(query);
+           pstmt.setString(1, username);
+           pstmt.setString(2, password);
+
+           ResultSet rs = pstmt.executeQuery();
+
+           if (rs.next()) {
+               System.out.println("User authenticated.");
+           } else {
+               System.out.println("Authentication failed.");
+           }
+
+           conn.close();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+}
