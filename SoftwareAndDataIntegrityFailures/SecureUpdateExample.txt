@@ -1,0 +1,46 @@
+// In a compliant scenario, the application downloads the update over a secure HTTPS connection and verifies the file's integrity using a cryptographic hash or a digital signature before applying it.
+
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+
+public class SecureUpdateExample {
+
+   public static void main(String[] args) {
+       String fileUrl = "https://example.com/software/update.jar"; // Secure HTTPS URL
+       String savePath = "update.jar";
+       String expectedHash = "5f4dcc3b5aa765d61d8327deb882cf99"; // Example MD5 hash of the update
+
+       try (BufferedInputStream in = new BufferedInputStream(new URL(fileUrl).openStream());
+            FileOutputStream fileOutputStream = new FileOutputStream(savePath)) {
+
+           byte[] dataBuffer = new byte[1024];
+           int bytesRead;
+           MessageDigest md = MessageDigest.getInstance("MD5");
+           while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+               fileOutputStream.write(dataBuffer, 0, bytesRead);
+               md.update(dataBuffer, 0, bytesRead);
+           }
+
+           // Secure: Verify the downloaded file's integrity before applying it
+           byte[] digest = md.digest();
+           StringBuilder sb = new StringBuilder();
+           for (byte b : digest) {
+               sb.append(String.format("%02x", b));
+           }
+           String downloadedFileHash = sb.toString();
+
+           if (expectedHash.equals(downloadedFileHash)) {
+               System.out.println("Update downloaded and verified. Ready to apply.");
+           } else {
+               System.out.println("Update verification failed! Do not apply the update.");
+           }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+   }
+}
+
