@@ -1,0 +1,43 @@
+// In a compliant scenario, the application implements robust authentication measures, including secure password storage, account lockout mechanisms, and protections against brute-force attacks.
+
+
+import org.mindrot.jbcrypt.BCrypt;
+import java.util.HashMap;
+import java.util.Map;
+
+public class SecureAuthenticationExample {
+
+   // Mock database of users with hashed passwords
+   private static final Map<String, String> users = new HashMap<>();
+
+   static {
+       users.put("user1", BCrypt.hashpw("password123", BCrypt.gensalt()));  // Stronger password hashed with bcrypt
+       users.put("admin", BCrypt.hashpw("Str0ngP@ssw0rd!", BCrypt.gensalt()));  // Strong password hashed with bcrypt
+   }
+
+   private static final int MAX_ATTEMPTS = 3;
+   private static final Map<String, Integer> loginAttempts = new HashMap<>();
+
+   public static void main(String[] args) {
+       String username = "admin";          // User input (username)
+       String password = "Str0ngP@ssw0rd!"; // User input (password)
+
+       // Initialize login attempts for the user if not already done
+       loginAttempts.putIfAbsent(username, 0);
+
+       // Check if the account is locked due to too many failed attempts
+       if (loginAttempts.get(username) >= MAX_ATTEMPTS) {
+           System.out.println("Account is locked due to too many failed attempts. Please try again later.");
+           return;
+       }
+
+       // Secure authentication: Hash the input password and compare with stored hash
+       if (users.containsKey(username) && BCrypt.checkpw(password, users.get(username))) {
+           System.out.println("Authentication successful! Access granted.");
+           loginAttempts.put(username, 0);  // Reset attempts on successful login
+       } else {
+           System.out.println("Authentication failed! Access denied.");
+           loginAttempts.put(username, loginAttempts.get(username) + 1);  // Increment failed attempts
+       }
+   }
+}
