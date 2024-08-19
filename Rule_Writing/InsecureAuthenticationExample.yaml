@@ -1,0 +1,7 @@
+rules:
+  - id: hardcoded-credentials
+    languages:
+      - java
+    severity: ERROR
+    message: Insecure authentication!
+    pattern: String $VAR = $VAL2;
