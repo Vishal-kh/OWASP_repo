@@ -10,15 +10,19 @@ public class InsecureAuthenticationExample {
    private static final Map<String, String> users = new HashMap<>();
 
    static {
+	// {fact rule=hardcoded-credentials-cdk@v1.0 defects=1}
+            // ruleid:hardcoded-credentials
        users.put("user1", "password123");  // Weak password
-       users.put("admin", "admin");        // Very weak password
+       // {fact rule=hardcoded-credentials-cdk@v1.0 defects=1}
+       // ruleid:hardcoded-credentials
+	 users.put("admin", "admin");        // Very weak password
    }
 
    public static void main(String[] args) {
        String username = "admin";          // User input (username)
        String password = "admin";          // User input (password)
 
-       // Insecure authentication: No protection against brute-force attacks or weak passwords
+       
        if (users.containsKey(username) && users.get(username).equals(password)) {
            System.out.println("Authentication successful! Access granted.");
        } else {

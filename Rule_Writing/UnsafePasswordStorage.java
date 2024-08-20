@@ -10,6 +10,8 @@ public class UnsafePasswordStorage {
    public static String hashPassword(String plainPassword) {
        try {
            // Create MD5 message digest instance
+           // {fact rule=week-hashing-md5-cdk@v1.0 defects=1}
+            // ruleid:week-hashing-md5
            MessageDigest md = MessageDigest.getInstance("MD5");
            md.update(plainPassword.getBytes());
            byte[] digest = md.digest();
@@ -27,7 +29,11 @@ public class UnsafePasswordStorage {
 
    // Example usage
    public static void main(String[] args) {
+        // {fact rule=week-hashing-md5-cdk@v1.0 defects=1}
+        // ruleid:week-hashing-md5
        String plainPassword = "mySecureP@ssw0rd";
+        // {fact rule=week-hashing-md5-cdk@v1.0 defects=1}
+        // ruleid:week-hashing-md5
        String hashedPassword = hashPassword(plainPassword);
 
        // Store the hashedPassword in the database (simulated here)
