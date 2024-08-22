@@ -16,7 +16,7 @@ public class InsecureDesignExample {
            Statement stmt = conn.createStatement();
 
            // Insecure design: Directly allowing account deletion based on user ID from the input
-           // {fact rule=hardcoded-credentials-cdk@v1.0 defects=1}
+           // {fact rule=insecure-design-account-deletion-cdk@v1.0 defects=1}
             // ruleid:insecure-design-account-deletion
            String query = "DELETE FROM users WHERE user_id = " + userIdToDelete;
            stmt.executeUpdate(query);
@@ -39,7 +39,7 @@ public class InsecureDesignExample {
 
            // Secure design: Ensure the current user is the owner of the account they want to delete
            if (currentUserId.equals(userIdToDelete)) {
-             // {fact rule=hardcoded-credentials-cdk@v1.0 defects=0}
+             // {fact rule=insecure-design-account-deletion-cdk@v1.0 defects=0}
             // ok:insecure-design-account-deletion
                String query = "DELETE FROM users WHERE user_id = ?";
                PreparedStatement pstmt = conn.prepareStatement(query);
