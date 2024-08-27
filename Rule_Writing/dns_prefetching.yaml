@@ -1,0 +1,22 @@
+rules:
+  - id: dns-prefetching-allowed
+    languages:
+      - javascript
+    severity: WARNING
+    message: |
+     DNS Prefetching is allowed, which can lead to privacy risks. Set 'allow' to 'false' to disable DNS prefetching.You can refer to the official Helmet.js documentation for more information:https://helmetjs.github.io/ 
+    patterns:
+      - pattern-inside: |
+          var $EX=require('express')
+          var $HELMET=require('helmet')
+          var $APP = express(...)
+          function $FUNCT(...){
+            ...
+          }
+      - pattern: |
+          $APP.use($HELMET.dnsPrefetchControl({
+          allow: true
+          })) 
+    metadata:
+        cwe:
+          - "CWE-934: Controls for Security-Sensitive Functionality Missing"
