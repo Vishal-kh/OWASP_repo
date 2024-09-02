@@ -1,0 +1,11 @@
+rules:
+  - id: hardcoded-credentials
+    languages:
+      - java
+    severity: ERROR
+    metadata:
+      cwe:
+        - "CWE-CWE-798: Use of Hard-coded Credentials"
+    message: Insecure authentication!the application implements a weak
+      authentication mechanism that does not enforce proper password check
+    pattern: String $VAR = $VAL2;

@@ -1,0 +1,15 @@
+rules:
+  - id: logged-detail-error-msg
+    languages:
+      - java
+    severity: ERROR
+    metadata:
+      cwe:
+        - "CWE-CWE-497: Exposure of Sensitive System Information to an Unauthorized Control Sphere"
+    message: the application is configured to display detailed error messages,
+      including stack traces, which can be valuable to attackers.
+    pattern: |-
+      catch($EXC $VAR){
+      ...
+      $VAR.printStackTrace();
+      }
